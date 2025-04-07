@@ -47,28 +47,6 @@ class SupplierService {
 
   }
 
-  async loginSupplier(data: { email: string; password: string }) {
-    const { email, password } = data;
-
-    const supplier = await Supplier.findOne({ email }).select('+password');
-    if (!supplier) {
-      throw new Error('Supplier not found');
-    }
-
-    const isMatch = await bcrypt.compare(password, supplier.password);
-    if (!isMatch) {
-      throw new Error('Invalid credentials');
-    }
-
-    const token = jwt.sign({ id: supplier._id }, process.env.JWT_SECRET as string, {
-      expiresIn: '1d',
-    });
-
-    const { password: _, ...supplierWithoutPassword } = supplier.toObject();
-    return { token, supplier: supplierWithoutPassword };
-
-  }
-
   async getAllSuppliers() {
       return await Supplier.find();
     }
