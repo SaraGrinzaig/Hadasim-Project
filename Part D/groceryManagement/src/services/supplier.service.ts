@@ -1,9 +1,8 @@
-import Supplier from '../models/Supplier';
+import Supplier from '../models/supplier';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import { RegisterSupplierData } from '../types/supplier.type';
-import Good from '../models/Good';
-import SupplierGoods from '../models/SuppliersGoods';
+import SupplierGoods from '../models/suppliers-goods';
 import GoodsService from './goods.service';
 
 class SupplierService {
@@ -39,7 +38,7 @@ class SupplierService {
       });
     }
 
-    const token = jwt.sign({ id: newSupplier._id }, process.env.JWT_SECRET as string, {
+    const token = jwt.sign({ id: newSupplier._id, role: 'supplier' }, process.env.JWT_SECRET as string, {
       expiresIn: '1d',
     });
 

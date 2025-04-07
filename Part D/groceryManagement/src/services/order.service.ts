@@ -1,6 +1,5 @@
-import Order from '../models/Order';
-import Good from '../models/Good';
-import SupplierGoods from '../models/SuppliersGoods';
+import Order from '../models/order';
+import SupplierGoods from '../models/suppliers-goods';
 
 class OrderService {
   async createOrder(data: {

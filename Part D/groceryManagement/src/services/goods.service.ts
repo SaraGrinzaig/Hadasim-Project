@@ -1,5 +1,5 @@
-import Good from '../models/Good';
-import SupplierGoods from '../models/SuppliersGoods';
+import Good from '../models/good';
+import SupplierGoods from '../models/suppliers-goods';
 import { CreateGoodInput } from '../types/good.type';
 
 class GoodsService {
