@@ -28,6 +28,7 @@ export default function CreateOrderForm({ show, handleClose }: Props) {
   const [goods, setGoods] = useState<Good[]>([]);
   const [quantities, setQuantities] = useState<{ [goodId: string]: number }>({});
   const [loadingGoods, setLoadingGoods] = useState(false);
+  const [selectedGoods, setSelectedGoods] = useState<{ [goodId: string]: boolean }>({});
 
   useEffect(() => {
     const fetchSuppliers = async () => {
@@ -58,10 +59,13 @@ export default function CreateOrderForm({ show, handleClose }: Props) {
         setGoods(res.data);
         // reset quantities
         const initialQuantities: { [goodId: string]: number } = {};
+        const initialSelected: { [goodId: string]: boolean } = {};
         res.data.forEach((g: Good) => {
           initialQuantities[g.goodId._id] = g.minOrderQuantity ?? 0;
+          initialSelected[g.goodId._id] = false;
         });
         setQuantities(initialQuantities);
+        setSelectedGoods(initialSelected);
       } catch (err) {
         console.error('Failed to load goods:', err);
       } finally {
@@ -76,14 +80,28 @@ export default function CreateOrderForm({ show, handleClose }: Props) {
     setQuantities(prev => ({ ...prev, [goodId]: value }));
   };
 
+  const handleCheckboxChange = (goodId: string, checked: boolean) => {
+    setSelectedGoods(prev => ({ ...prev, [goodId]: checked }));
+  };
+
   const handleSubmit = async () => {
     const token = localStorage.getItem('token');
-    const items = Object.entries(quantities)
-      .filter(([_, quantity]) => quantity > 0)
-      .map(([goodId, quantity]) => ({ goodId, quantity }));
+    const items = Object.entries(selectedGoods)
+      .filter(([goodId, isSelected]) => isSelected)
+      .map(([goodId]) => {
+        const quantity = quantities[goodId];
+        const good = goods.find(g => g.goodId._id === goodId);
+        return {
+          goodId,
+          quantity,
+          valid: good && quantity >= good.minOrderQuantity
+        };
+      })
+      .filter(item => item.valid)
+      .map(item => ({ goodId: item.goodId, quantity: item.quantity }));
 
     if (items.length === 0) {
-      alert('Please select at least one item with quantity > 0');
+      alert('Please select at least one product and enter valid quantity');
       return;
     }
 
@@ -132,25 +150,40 @@ export default function CreateOrderForm({ show, handleClose }: Props) {
               <table className="table">
                 <thead>
                   <tr>
+                    <th>Select</th>
                     <th>Product Name</th>
                     <th>Quantity</th>
                   </tr>
                 </thead>
                 <tbody>
-                  {goods.map(good => (
-                    <tr key={good._id}>
-                      <td>{good.goodId.name}</td>
-                      <td>
-                        <Form.Control
-                          type="number"
-                          min={0}
-                          value={quantities[good.goodId._id] || 0}
-                          onChange={e => handleQuantityChange(good.goodId._id, Number(e.target.value))}
-                        />
-                      </td>
-                    </tr>
-                  ))}
+                  {goods.map(good => {
+                    const goodId = good.goodId._id;
+                    return (
+                      <tr key={good._id}>
+                        <td>
+                          <Form.Check
+                            type="checkbox"
+                            checked={selectedGoods[goodId] || false}
+                            onChange={e => handleCheckboxChange(goodId, e.target.checked)}
+                          />
+                        </td>
+                        <td>{good.goodId.name}</td>
+                        <td>
+                          {selectedGoods[goodId] && (
+                            <Form.Control
+                              type="number"
+                              min={good.minOrderQuantity}
+                              step={1}
+                              value={quantities[goodId] || good.minOrderQuantity}
+                              onChange={e => handleQuantityChange(goodId, Number(e.target.value))}
+                            />
+                          )}
+                        </td>
+                      </tr>
+                    );
+                  })}
                 </tbody>
+
               </table>
             )}
 
