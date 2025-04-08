@@ -2,6 +2,7 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import Login from './pages/Login';
 import SupplierDashboard from './pages/supplier/SupplierDashboard';
 import AllOrders from './pages/storeOwner/AllOrders';
+import Register from './pages/Register';
 
 function AppRouter() {
   const token = localStorage.getItem('token');
@@ -10,10 +11,14 @@ function AppRouter() {
     <Router>
       <Routes>
         <Route path="/" element={<Login />} />
+
+        <Route path="/register" element={<Register />} />
+
         <Route
           path="/supplier"
           element={token ? <SupplierDashboard /> : <Navigate to="/" />}
         />
+
         <Route
           path="/store-owner"
           element={token ? <AllOrders /> : <Navigate to="/" />}

@@ -19,14 +19,14 @@ function Login() {
       localStorage.setItem('token', token);
       localStorage.setItem('role', role);
 
-      if (role === 'supplier'){
+      if (role === 'supplier') {
         localStorage.setItem('supplierId', user._id);
         navigate('/supplier');
-      } 
-      else if (role === 'storeOwner'){
+      }
+      else if (role === 'storeOwner') {
         localStorage.setItem('ownerId', user._id);
         navigate('/store-owner');
-      } 
+      }
     } catch (error: any) {
       alert(error.response?.data?.error || 'Login failed');
     }
@@ -41,6 +41,11 @@ function Login() {
         <input required type="password" placeholder="Password" value={password} onChange={e => setPassword(e.target.value)} />
         <button type="submit">Login</button>
       </form>
+
+      <p className="mt-3">
+        Not registered yet? <a href="/register">Register as a new supplier</a>
+      </p>
+
 
     </div>
   );

@@ -4,28 +4,28 @@ import axios from 'axios';
 import CreateOrderForm from './CreateOrderForm';
 import { Plus } from 'react-bootstrap-icons';
 
-type OrderItem = {
+interface OrderItem{
     goodId: string;
     quantity: number;
     pricePerUnit: number;
     totalPrice: number;
-};
+}
 
-type Supplier = {
+interface Supplier{
     _id: string;
     companyName: string;
     email: string;
     phone: string;
     representativeName: string;
-};
+}
 
-type Order = {
+interface Order {
     _id: string;
     supplierId: Supplier;
     items: OrderItem[];
     status: 'invited' | 'in process' | 'completed';
     createdAt: string;
-};
+}
 
 export default function AllOrders() {
     const [orders, setOrders] = useState<Order[]>([]);
@@ -131,6 +131,7 @@ export default function AllOrders() {
                         <th>Supplier</th>
                         <th>Status</th>
                         <th>Total Items</th>
+                        {/* <th>Total Price</th> */}
                         <th>Created At</th>
                         <th>Actions</th>
                     </tr>
@@ -142,6 +143,7 @@ export default function AllOrders() {
                             <td>{order.supplierId?.companyName}</td>
                             <td>{getStatusBadge(order.status)}</td>
                             <td>{order.items.length}</td>
+                            {/* <td>{order.items[index].totalPrice}</td> */}
                             <td>{new Date(order.createdAt).toLocaleDateString('en-GB')}</td>
                             <td>
                                 {order.status === 'in process' && (
