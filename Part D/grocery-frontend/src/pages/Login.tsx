@@ -15,11 +15,18 @@ function Login() {
         password,
       });
 
-      const { token, role } = res.data;
+      const { token, role, user } = res.data;
       localStorage.setItem('token', token);
+      localStorage.setItem('role', role);
 
-      if (role === 'supplier') navigate('/supplier');
-      else if (role === 'storeOwner') navigate('/store-owner');
+      if (role === 'supplier'){
+        localStorage.setItem('supplierId', user._id);
+        navigate('/supplier');
+      } 
+      else if (role === 'storeOwner'){
+        localStorage.setItem('ownerId', user._id);
+        navigate('/store-owner');
+      } 
     } catch (error: any) {
       alert(error.response?.data?.error || 'Login failed');
     }

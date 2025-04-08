@@ -1,7 +1,7 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import Login from './pages/Login';
 import SupplierDashboard from './pages/supplier/SupplierDashboard';
-import StoreOwnerDashboard from './pages/storeOwner/OwnerDashboard';
+import AllOrders from './pages/storeOwner/AllOrders';
 
 function AppRouter() {
   const token = localStorage.getItem('token');
@@ -16,8 +16,9 @@ function AppRouter() {
         />
         <Route
           path="/store-owner"
-          element={token ? <StoreOwnerDashboard /> : <Navigate to="/" />}
+          element={token ? <AllOrders /> : <Navigate to="/" />}
         />
+
         <Route path="*" element={<Navigate to="/" />} />
       </Routes>
     </Router>
