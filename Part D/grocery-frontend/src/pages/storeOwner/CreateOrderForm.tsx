@@ -13,6 +13,8 @@ interface Good {
     _id: string;
     name: string;
   };
+  pricePerUnit: number;
+  minOrderQuantity: number;
 }
 
 interface Props {
@@ -57,7 +59,7 @@ export default function CreateOrderForm({ show, handleClose }: Props) {
         // reset quantities
         const initialQuantities: { [goodId: string]: number } = {};
         res.data.forEach((g: Good) => {
-          initialQuantities[g.goodId._id] = 0;
+          initialQuantities[g.goodId._id] = g.minOrderQuantity ?? 0;
         });
         setQuantities(initialQuantities);
       } catch (err) {
