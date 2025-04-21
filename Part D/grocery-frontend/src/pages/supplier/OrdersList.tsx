@@ -46,7 +46,7 @@ const OrdersList = ({ orders, onApprove }: OrdersListProps) => {
                 <th>Product</th>
                 <th>Quantity</th>
                 <th>Price/Unit</th>
-                <th>Total</th>
+                <th>Total Price</th>
                 <th>Status</th>
                 <th>Action</th>
               </tr>
