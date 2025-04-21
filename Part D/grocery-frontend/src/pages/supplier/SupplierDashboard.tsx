@@ -74,27 +74,27 @@ const SupplierDashboard = () => {
   
       return (
         <Container maxWidth="lg">
-          <Paper elevation={3} sx={{ padding: 4, marginTop: 6 }}>
-            <Typography variant="h4" gutterBottom textAlign="center">
-              Supplier Orders
-            </Typography>
+          <div className="my-5">
+            <h2 className="text-center mb-4">Supplier Orders</h2>
       
-            <Box mb={2} textAlign="center">
-              <Select
+            <div className="text-center mb-3">
+              <select
+                className="form-select w-auto d-inline-block"
                 value={statusFilter}
                 onChange={e => setStatusFilter(e.target.value)}
               >
-                <MenuItem value="all">All</MenuItem>
-                <MenuItem value="invited">Invited</MenuItem>
-                <MenuItem value="in process">In Process</MenuItem>
-                <MenuItem value="completed">Completed</MenuItem>
-              </Select>
-            </Box>
+                <option value="all">All</option>
+                <option value="invited">Invited</option>
+                <option value="in process">In Process</option>
+                <option value="completed">Completed</option>
+              </select>
+            </div>
       
             <OrdersList orders={filteredOrders} onApprove={handleApprove} />
-          </Paper>
+          </div>
         </Container>
-      );      
+      );
+      
   };
   
   export default SupplierDashboard;

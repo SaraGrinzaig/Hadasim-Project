@@ -1,13 +1,13 @@
-import {
-    Table,
-    TableBody,
-    TableCell,
-    TableContainer,
-    TableHead,
-    TableRow,
-    Paper,
-    Button,
-} from '@mui/material';
+// import {
+//     Table,
+//     TableBody,
+//     TableCell,
+//     TableContainer,
+//     TableHead,
+//     TableRow,
+//     Paper,
+//     Button,
+// } from '@mui/material';
 
 interface Good {
     _id: string;
@@ -38,47 +38,52 @@ interface OrdersListProps {
 
 const OrdersList = ({ orders, onApprove }: OrdersListProps) => {
     return (
-        <TableContainer component={Paper}>
-            <Table>
-                <TableHead>
-                    <TableRow>
-                        <TableCell>Date</TableCell>
-                        <TableCell>Product</TableCell>
-                        <TableCell>Quantity</TableCell>
-                        <TableCell>Price/Unit</TableCell>
-                        <TableCell>Total</TableCell>
-                        <TableCell>Status</TableCell>
-                        <TableCell>Action</TableCell>
-                    </TableRow>
-                </TableHead>
-                <TableBody>
-                    {orders.map(order => (
-                        order.items.map(item => (
-                            <TableRow key={item._id}>
-                                <TableCell>{new Date(order.createdAt).toLocaleString()}</TableCell>
-                                <TableCell>{item.goodId.name}</TableCell>
-                                <TableCell>{item.quantity}</TableCell>
-                                <TableCell>{item.pricePerUnit}</TableCell>
-                                <TableCell>{item.totalPrice}</TableCell>
-                                <TableCell>{order.status}</TableCell>
-                                <TableCell>
-                                    {order.status === 'invited' && (
-                                        <Button
-                                            variant="contained"
-                                            color="primary"
-                                            onClick={() => onApprove(order._id)}
-                                        >
-                                            Approve
-                                        </Button>
-                                    )}
-                                </TableCell>
-                            </TableRow>
-                        ))
-                    ))}
-                </TableBody>
-            </Table>
-        </TableContainer>
-    );
+        <div className="table-responsive">
+          <table className="table table-striped table-bordered align-middle text-center">
+            <thead className="table-light">
+              <tr>
+                <th>Date</th>
+                <th>Product</th>
+                <th>Quantity</th>
+                <th>Price/Unit</th>
+                <th>Total</th>
+                <th>Status</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              {orders.map(order =>
+                order.items.map(item => (
+                  <tr key={item._id}>
+                    <td>{new Date(order.createdAt).toLocaleString()}</td>
+                    <td>{item.goodId.name}</td>
+                    <td>{item.quantity}</td>
+                    <td>{item.pricePerUnit}</td>
+                    <td>{item.totalPrice}</td>
+                    <td>
+                      <span className={`badge 
+                        ${order.status === 'invited' ? 'bg-warning' : 
+                          order.status === 'in process' ? 'bg-info' : 'bg-success'}`}>
+                        {order.status}
+                      </span>
+                    </td>
+                    <td>
+                      {order.status === 'invited' && (
+                        <button
+                          className="btn btn-primary btn-sm"
+                          onClick={() => onApprove(order._id)}
+                        >
+                          Approve
+                        </button>
+                      )}
+                    </td>
+                  </tr>
+                ))
+              )}
+            </tbody>
+          </table>
+        </div>
+      );
 };
 
 export default OrdersList;  
